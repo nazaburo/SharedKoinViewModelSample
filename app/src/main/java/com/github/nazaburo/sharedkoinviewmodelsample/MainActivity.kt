@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
                             startDestination = Screen.ScreenA,
                         ) {
                             composable<Screen.ScreenA> {
-                                val sharedViewModel = it.sharedKoinViewModel<SharedViewModel>(navController)
+                                val sharedViewModel = it.sharedKoinViewModelFixed<SharedViewModel>(navController)
                                 ScreenAComposable(
                                     onNavigateToScreenB = {
                                         navController.navigate(Screen.ScreenB)
@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
                             }
 
                             composable<Screen.ScreenB> {
-                                val sharedViewModel = it.sharedKoinViewModel<SharedViewModel>(navController)
+                                val sharedViewModel = it.sharedKoinViewModelFixed<SharedViewModel>(navController)
 
                                 ScreenBComposable(
                                     onNavigateBack = {
