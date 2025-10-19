@@ -3,7 +3,13 @@ package com.github.nazaburo.sharedkoinviewmodelsample.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable
-object ScreenA
+sealed class Screen {
+    @Serializable
+    object ScreenRoute
 
-@Serializable
-object ScreenB
+    @Serializable
+    object ScreenA
+
+    @Serializable
+    object ScreenB
+}

@@ -9,13 +9,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.github.nazaburo.sharedkoinviewmodelsample.navigation.ScreenA
-import com.github.nazaburo.sharedkoinviewmodelsample.navigation.ScreenB
-import com.github.nazaburo.sharedkoinviewmodelsample.ui.screen.ScreenA
+import com.github.nazaburo.sharedkoinviewmodelsample.navigation.Screen
 import com.github.nazaburo.sharedkoinviewmodelsample.ui.screen.ScreenA as ScreenAComposable
 import com.github.nazaburo.sharedkoinviewmodelsample.ui.screen.ScreenB as ScreenBComposable
 import com.github.nazaburo.sharedkoinviewmodelsample.ui.theme.MyApplicationTheme
+import com.github.nazaburo.sharedkoinviewmodelsample.viewmodel.SharedViewModel
+import org.koin.compose.viewmodel.sharedKoinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,22 +29,31 @@ class MainActivity : ComponentActivity() {
 
                     NavHost(
                         navController = navController,
-                        startDestination = ScreenA
+                        startDestination = Screen.ScreenRoute,
                     ) {
-                        composable<ScreenA> {
-                            ScreenAComposable(
-                                onNavigateToScreenB = {
-                                    navController.navigate(ScreenB)
-                                }
-                            )
-                        }
+                        navigation<Screen.ScreenRoute>(
+                            startDestination = Screen.ScreenA,
+                        ) {
+                            composable<Screen.ScreenA> {
+                                val sharedViewModel = it.sharedKoinViewModel<SharedViewModel>(navController)
+                                ScreenAComposable(
+                                    onNavigateToScreenB = {
+                                        navController.navigate(Screen.ScreenB)
+                                    },
+                                    viewModel = sharedViewModel
+                                )
+                            }
 
-                        composable<ScreenB> {
-                            ScreenBComposable(
-                                onNavigateBack = {
-                                    navController.popBackStack()
-                                }
-                            )
+                            composable<Screen.ScreenB> {
+                                val sharedViewModel = it.sharedKoinViewModel<SharedViewModel>(navController)
+
+                                ScreenBComposable(
+                                    onNavigateBack = {
+                                        navController.popBackStack()
+                                    },
+                                    viewModel = sharedViewModel
+                                )
+                            }
                         }
                     }
                 }
